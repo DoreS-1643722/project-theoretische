@@ -39,14 +39,16 @@ public class Automaton {
     private String getShortestExampleHulp(String current_state, String previous_state){
         String temp_shortest_str = "";
         if(current_state.equals(accept_state)){
-            for(int i = 0; i < m_relations.size(); i++){
-                return temp_shortest_str;
-            }
+            return temp_shortest_str;
         }
         for(int i = 0; i < m_relations.size(); i++){
             if(m_relations.get(i).get(0).equals(current_state)){
                 String new_state = m_relations.get(i).get(2);
+                String last_str = temp_shortest_str;
                 temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
+                if(!last_str.equals("") && last_str.length() < temp_shortest_str.length()){
+                    temp_shortest_str = last_str;
+                }
             }
         }
         return temp_shortest_str;

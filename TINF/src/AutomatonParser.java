@@ -68,6 +68,6 @@ public class AutomatonParser {
         AutomatonParser parser = new AutomatonParser("src/adventure.aut");
         parser.parse();
         Automaton result = parser.automaton();
-        result.getShortestExample(true);
+        System.out.println(result.getShortestExample(true));
     }
 }
