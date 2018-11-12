@@ -46,8 +46,12 @@ public class AutomatonParser {
      * line by line
      */
     public void parse(){
-        for(int i = 0; i < m_file_contents.size(); i++){
-            m_automaton.readNewLine(m_file_contents.get(i));
+        try{
+            for(int i = 0; i < m_file_contents.size(); i++){
+                m_automaton.readNewLine(m_file_contents.get(i));
+            }
+        } catch (Exception e){
+            System.err.println("File not in the write format.");
         }
     }
 

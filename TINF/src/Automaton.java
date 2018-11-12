@@ -46,7 +46,7 @@ public class Automaton {
                 String new_state = m_relations.get(i).get(2);
                 String last_str = temp_shortest_str;
                 temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
-                if(!last_str.equals("") && last_str.length() < temp_shortest_str.length()){
+                if(!last_str.equals("") && current_state.equals(accept_state) && last_str.length() < temp_shortest_str.length()){
                     temp_shortest_str = last_str;
                 }
             }
@@ -70,7 +70,7 @@ public class Automaton {
      * in the right lists
      * @param new_line the new line given by the parser
      */
-    public void readNewLine(String new_line){
+    public void readNewLine(String new_line) throws Exception {
         if(new_line.length() >= 13 && new_line.substring(0, 13).equals("( START ) |- ")){
             String new_state = new_line.substring(13);
             start_state = new_state;
@@ -85,6 +85,9 @@ public class Automaton {
             }
             else{
                 int j = findIndexNextWhitespace(new_line.substring(i+1));
+                if(j == 0 || j == new_line.substring(i+1).length()){
+                    throw new Exception("File not in the write format");
+                }
                 new_state = new_line.substring(0, i);
                 String new_state2 = new_line.substring(i+j+2);
                 addNewState(new_state);
