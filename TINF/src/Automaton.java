@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public class Automaton {
     private ArrayList<String> m_states;
+    private ArrayList<Boolean> m_state_already_used;
     private ArrayList<ArrayList<String>> m_relations;
     private String start_state;
     private String accept_state;
@@ -14,6 +15,7 @@ public class Automaton {
     public Automaton(){
         m_states = new ArrayList<String>();
         m_relations = new ArrayList<ArrayList<String>>();
+        m_state_already_used = new ArrayList<Boolean>();
     }
 
     /**
@@ -45,9 +47,12 @@ public class Automaton {
             if(m_relations.get(i).get(0).equals(current_state)){
                 String new_state = m_relations.get(i).get(2);
                 String last_str = temp_shortest_str;
-                temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
-                if(!last_str.equals("") && current_state.equals(accept_state) && last_str.length() < temp_shortest_str.length()){
-                    temp_shortest_str = last_str;
+                if(m_state_already_used.get(m_states.indexOf(new_state)) == false) {
+                    m_state_already_used.set(m_states.indexOf(current_state), true);
+                    temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
+                    if (!(last_str.equals("")) && current_state.equals(accept_state) && last_str.length() < temp_shortest_str.length()) {
+                        temp_shortest_str = last_str;
+                    }
                 }
             }
         }
@@ -71,15 +76,15 @@ public class Automaton {
      * @param new_line the new line given by the parser
      */
     public void readNewLine(String new_line) throws Exception {
-        if(new_line.length() >= 13 && new_line.substring(0, 13).equals("( START ) |- ")){
-            String new_state = new_line.substring(13);
+        if(new_line.length() >= 11 && new_line.substring(0, 11).equals("(START) |- ")){
+            String new_state = new_line.substring(11);
             start_state = new_state;
             addNewState(new_state);
         }
         else{
             int i = findIndexNextWhitespace(new_line);
             String new_state = new_line.substring(0, i);
-            if(new_line.length() >= 13 && new_line.substring(i, i + 13).equals(" -| ( FINAL )")){
+            if(new_line.length() >= 11 && new_line.substring(i, i + 11).equals(" -| (FINAL)")){
                 accept_state = new_state;
                 addNewState(new_state);
             }
@@ -135,6 +140,7 @@ public class Automaton {
     private void addNewState(String new_state){
         if(m_states.indexOf(new_state) == -1){
             m_states.add(new_state);
+            m_state_already_used.add(false);
         }
     }
 }
