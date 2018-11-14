@@ -8,6 +8,7 @@ public class Automaton {
     private ArrayList<ArrayList<String>> m_relations;
     private String start_state;
     private String accept_state;
+    private Boolean check;
 
     /**
      * constructor
@@ -16,6 +17,7 @@ public class Automaton {
         m_states = new ArrayList<String>();
         m_relations = new ArrayList<ArrayList<String>>();
         m_state_already_used = new ArrayList<Boolean>();
+        check = false;
     }
 
     /**
@@ -41,6 +43,7 @@ public class Automaton {
     private String getShortestExampleHulp(String current_state, String previous_state){
         String temp_shortest_str = "";
         if(current_state.equals(accept_state)){
+            check = true;
             return temp_shortest_str;
         }
         for(int i = 0; i < m_relations.size(); i++){
@@ -50,8 +53,16 @@ public class Automaton {
                 if(m_state_already_used.get(m_states.indexOf(new_state)) == false) {
                     m_state_already_used.set(m_states.indexOf(current_state), true);
                     temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
-                    if (!(last_str.equals("")) && current_state.equals(accept_state) && last_str.length() < temp_shortest_str.length()) {
-                        temp_shortest_str = last_str;
+                    if(check == false){
+                        temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length() - 1);
+                    }
+                    else{
+                        if(last_str.equals("")){
+                            last_str = temp_shortest_str;
+                        }
+                        else if (!(last_str.equals("")) && last_str.length() < temp_shortest_str.length()) {
+                            temp_shortest_str = last_str;
+                        }
                     }
                 }
             }
