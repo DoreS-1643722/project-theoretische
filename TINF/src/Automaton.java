@@ -3,6 +3,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Automaton {
+    /**
+     * Getter for the states of the automaton
+     * @return a list of all states
+     */
+    public ArrayList<String> getM_states() {
+        return m_states;
+    }
+
+    /**
+     * Getter for the start state of the automaton
+     * @return the start state
+     */
+    public String getStart_state() {
+        return start_state;
+    }
+
+    /**
+     * Getter for the accept state of the automaton
+     * @return the accept state
+     */
+    public String getAccept_state() {
+        return accept_state;
+    }
+
     private ArrayList<String> m_states;
     private ArrayList<Boolean> m_state_already_used;
     private ArrayList<ArrayList<String>> m_relations;
@@ -11,7 +35,7 @@ public class Automaton {
     private Boolean check;
 
     /**
-     * constructor
+     * Constructor
      */
     public Automaton(){
         m_states = new ArrayList<String>();
@@ -21,10 +45,27 @@ public class Automaton {
     }
 
     /**
+     * Constructor with parameters
+     * @param states the set of all states for this automaton.
+     * @param relations the transition function for this automaton.
+     * @param start_state the start state for this automaton
+     * @param accept_state the accept state for this automaton
+     */
+    public Automaton(ArrayList<String> states, ArrayList<ArrayList<String>> relations,
+                     String start_state, String accept_state){
+        m_states = states;
+        this.start_state = start_state;
+        this.accept_state = accept_state;
+        m_relations = relations;
+
+        m_state_already_used = new ArrayList<Boolean>();
+        check = false;
+    }
+
+    /**
      *
      * Returns the shortest string that the automaton accepts.
-     * @param accept returns the shortest string that the automaton accepts if
-     *               accept is true
+     * @param accept returns the shortest string that the automaton accepts if accept is true
      * @return
      */
     public String getShortestExample(Boolean accept){
@@ -71,19 +112,38 @@ public class Automaton {
     }
 
     /**
-     * Calculates the intersection of two automatons
-     * @param aut the second automaton that is to be intersected on
-     *            this one
-     * @return the intersected automaton
+     * Calculates the cartesian product of two sets of states
+     * @param aut the second automaton that is to be intersected on this one
+     * @return the cartesian product oof two sets of states
      */
-    public Automaton intersection(Automaton aut){
+    public ArrayList<String> cartesianProductStates(Automaton aut){
+        ArrayList<String> cartesian_product = new ArrayList<String>();
 
-        return aut;
+        for (String state1: this.m_states) {
+            for (String state2: aut.getM_states()) {
+                cartesian_product.add(state1+state2);
+            }
+        }
+
+        return cartesian_product;
     }
 
     /**
-     * Reads the new line given as a parameter and puts the content
-     * in the right lists
+     * Calculates the intersection of two automatons
+     * @param aut the second automaton that is to be intersected on this one
+     * @return the intersected automaton
+     */
+    public Automaton intersection(Automaton aut){
+        ArrayList<String> new_states = cartesianProductStates(aut);
+        ArrayList<ArrayList<String>> new_relations = new ArrayList<ArrayList<String>>(); // TODO create function that makes a new transition function
+        String new_start_state = this.start_state + aut.getStart_state();
+        String new_accept_state = this.accept_state + aut.getAccept_state();
+
+        return new Automaton(new_states, new_relations, new_start_state, new_accept_state);
+    }
+
+    /**
+     * Reads the new line given as a parameter and puts the content in the right lists
      * @param new_line the new line given by the parser
      */
     public void readNewLine(String new_line) throws Exception {
@@ -144,8 +204,7 @@ public class Automaton {
     }
 
     /**
-     * Adds a new state to the m_states arraylist if the state
-     * isn't already in it
+     * Adds a new state to the m_states arraylist if the state isn't already in it
      * @param new_state
      */
     private void addNewState(String new_state){
