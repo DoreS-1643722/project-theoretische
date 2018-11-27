@@ -62,14 +62,13 @@ public class AutomatonParser {
         return m_automaton;
     }
 
-
     /**
      * Main function
      * @param args arguments that can be given through the command line
      *             not needed in this project
      */
     public static void main(String[] args){
-        AutomatonParser parser = new AutomatonParser("src/adventure.aut");
+        AutomatonParser parser = new AutomatonParser("src/adventure1.aut");
         parser.parse();
         Automaton result = parser.automaton();
         System.out.println(result.getShortestExample(true));
