@@ -29,6 +29,11 @@ public class Automaton {
 
     private ArrayList<String> m_states;
     private ArrayList<Boolean> m_state_already_used;
+
+    public ArrayList<ArrayList<String>> getM_relations() {
+        return m_relations;
+    }
+
     private ArrayList<ArrayList<String>> m_relations;
     private String start_state;
     private String accept_state;
@@ -114,18 +119,40 @@ public class Automaton {
     /**
      * Calculates the cartesian product of two sets of states
      * @param aut the second automaton that is to be intersected on this one
-     * @return the cartesian product oof two sets of states
+     * @return the cartesian product of two sets of states
      */
     public ArrayList<String> cartesianProductStates(Automaton aut){
         ArrayList<String> cartesian_product = new ArrayList<String>();
 
         for (String state1: this.m_states) {
             for (String state2: aut.getM_states()) {
-                cartesian_product.add(state1+state2);
+                cartesian_product.add(state1 + "-" + state2);
             }
         }
 
         return cartesian_product;
+    }
+
+    /**
+     * Calculates the product of two sets of relations
+     * @param aut the second automaton that is to be intersected on this one
+     * @return the product of two sets of relations
+     */
+    public ArrayList<ArrayList<String>> productRelations(Automaton aut){
+        ArrayList<ArrayList<String>> product = new ArrayList<ArrayList<String>>();
+
+        for (ArrayList<String> relation1: this.m_relations) {
+            for (ArrayList<String> relation2: aut.getM_relations()) {
+                ArrayList<String> temp_list = new ArrayList<String>();
+                temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
+                temp_list.add(relation1.get(1) + "-" +  relation2.get(1));
+                temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
+
+                product.add(temp_list);
+            }
+        }
+
+        return product;
     }
 
     /**
@@ -135,9 +162,9 @@ public class Automaton {
      */
     public Automaton intersection(Automaton aut){
         ArrayList<String> new_states = cartesianProductStates(aut);
-        ArrayList<ArrayList<String>> new_relations = new ArrayList<ArrayList<String>>(); // TODO create function that makes a new transition function
-        String new_start_state = this.start_state + aut.getStart_state();
-        String new_accept_state = this.accept_state + aut.getAccept_state();
+        ArrayList<ArrayList<String>> new_relations = productRelations(aut);
+        String new_start_state = this.start_state + "-" + aut.getStart_state();
+        String new_accept_state = this.accept_state + "-" + aut.getAccept_state();
 
         return new Automaton(new_states, new_relations, new_start_state, new_accept_state);
     }

@@ -71,6 +71,14 @@ public class AutomatonParser {
         AutomatonParser parser = new AutomatonParser("src/adventure1.aut");
         parser.parse();
         Automaton result = parser.automaton();
+
+        AutomatonParser parser2 = new AutomatonParser("src/adventure1.aut");
+        parser2.parse();
+        Automaton result2 = parser2.automaton();
+
+        result.intersection(result2);
+
+
         System.out.println(result.getShortestExample(true));
     }
 }
