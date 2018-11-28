@@ -21,8 +21,8 @@ public class Automaton {
      * Getter for the accept state of the automaton
      * @return the accept state
      */
-    public String getAccept_states(int i) {
-        return accept_states.get(i);
+    public ArrayList<String> getAccept_states() {
+        return accept_states;
     }
 
     private ArrayList<String> m_states;
@@ -53,13 +53,13 @@ public class Automaton {
      * @param states the set of all states for this automaton.
      * @param relations the transition function for this automaton.
      * @param start_state the start state for this automaton
-     * @param accept_state the accept state for this automaton
+     * @param accept_states the accept states for this automaton
      */
     public Automaton(ArrayList<String> states, ArrayList<ArrayList<String>> relations,
-                     String start_state, String accept_state){
+                     String start_state, ArrayList<String> accept_states){
         m_states = states;
         this.start_state = start_state;
-        this.accept_states = accept_state;
+        this.accept_states = accept_states;
         m_relations = relations;
 
         m_state_already_used = new ArrayList<Boolean>();
@@ -135,6 +135,23 @@ public class Automaton {
     }
 
     /**
+     * Calculates the cartesian product of two sets of accept states
+     * @param aut the second automaton that is to be intersected on this one
+     * @return the cartesian product of two sets of states
+     */
+    public ArrayList<String> cartesianProductAcceptStates(Automaton aut){
+        ArrayList<String> cartesian_product = new ArrayList<String>();
+
+        for (String state1: this.accept_states) {
+            for (String state2: aut.getAccept_states()) {
+                cartesian_product.add(state1 + "-" + state2);
+            }
+        }
+
+        return cartesian_product;
+    }
+
+    /**
      * Calculates the product of two sets of relations
      * @param aut the second automaton that is to be intersected on this one
      * @return the product of two sets of relations
@@ -165,7 +182,7 @@ public class Automaton {
         ArrayList<String> new_states = cartesianProductStates(aut);
         ArrayList<ArrayList<String>> new_relations = productRelations(aut);
         String new_start_state = this.start_state + "-" + aut.getStart_state();
-        String new_accept_state = this.accept_states + "-" + aut.getAccept_states();
+        ArrayList<String> new_accept_state = cartesianProductAcceptStates(aut);
 
         return new Automaton(new_states, new_relations, new_start_state, new_accept_state);
     }
