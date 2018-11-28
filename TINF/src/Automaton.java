@@ -36,6 +36,7 @@ public class Automaton {
     private String start_state;
     private ArrayList<String> accept_states;
     private Boolean check;
+    private Boolean m_passed_an_accept_state;
 
     /**
      * Constructor
@@ -45,6 +46,7 @@ public class Automaton {
         m_relations = new ArrayList<ArrayList<String>>();
         m_state_already_used = new ArrayList<Boolean>();
         check = false;
+        m_passed_an_accept_state = false;
         accept_states = new ArrayList<String>();
     }
 
@@ -63,7 +65,11 @@ public class Automaton {
         m_relations = relations;
 
         m_state_already_used = new ArrayList<Boolean>();
+        for(int i = 0; i < states.size(); i++){
+            m_state_already_used.add(false);
+        }
         check = false;
+        m_passed_an_accept_state = false;
     }
 
     /**
@@ -75,6 +81,9 @@ public class Automaton {
     public String getShortestExample(Boolean accept){
         String shortest_string = "";
         shortest_string = getShortestExampleHulp(start_state, null);
+        if(shortest_string == "" && !(m_passed_an_accept_state)){
+            shortest_string = null;
+        }
         return shortest_string;
     }
 
@@ -90,6 +99,7 @@ public class Automaton {
         for(int i = 0; i < accept_states.size(); i++){
             if(current_state.equals(accept_states.get(i))){
                 check = true;
+                m_passed_an_accept_state = true;
                 return temp_shortest_str;
             }
         }
@@ -161,12 +171,14 @@ public class Automaton {
 
         for (ArrayList<String> relation1: this.m_relations) {
             for (ArrayList<String> relation2: aut.getM_relations()) {
-                ArrayList<String> temp_list = new ArrayList<String>();
-                temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
-                temp_list.add(relation1.get(1) + "-" +  relation2.get(1));
-                temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
+                if(relation1.get(1).equals(relation2.get(1))){
+                    ArrayList<String> temp_list = new ArrayList<String>();
+                    temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
+                    temp_list.add(relation1.get(1));
+                    temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
 
-                product.add(temp_list);
+                    product.add(temp_list);
+                }
             }
         }
 
