@@ -80,7 +80,7 @@ public class Automaton {
      */
     public String getShortestExample(Boolean accept){
         String shortest_string = "";
-        shortest_string = getShortestExampleHulp(start_state, null);
+        shortest_string = getShortestExampleHulp(start_state, null, accept);
         if(shortest_string == "" && !(m_passed_an_accept_state)){
             shortest_string = null;
         }
@@ -94,10 +94,15 @@ public class Automaton {
      * @param previous_state the state the automaton was in in the previous iteration.
      * @return the current found string
      */
-    private String getShortestExampleHulp(String current_state, String previous_state){
+    private String getShortestExampleHulp(String current_state, String previous_state, Boolean accept){
         String temp_shortest_str = "";
         for(int i = 0; i < accept_states.size(); i++){
-            if(current_state.equals(accept_states.get(i))){
+            if(accept == true && current_state.equals(accept_states.get(i))){
+                check = true;
+                m_passed_an_accept_state = true;
+                return temp_shortest_str;
+            }
+            else if(accept == false && current_state.equals(accept_states.get(i))){
                 check = true;
                 m_passed_an_accept_state = true;
                 return temp_shortest_str;
@@ -109,7 +114,7 @@ public class Automaton {
                 String last_str = temp_shortest_str;
                 if(m_state_already_used.get(m_states.indexOf(new_state)) == false) {
                     m_state_already_used.set(m_states.indexOf(current_state), true);
-                    temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
+                    temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state, accept);
                     if(check == false){
                         temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length() - 1);
                     }
