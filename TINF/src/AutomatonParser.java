@@ -45,13 +45,13 @@ public class AutomatonParser {
      * by calling the readNewLine function of automaton
      * line by line
      */
-    public void parse(){
+    public void parse() throws Exception{
         try{
             for(int i = 0; i < m_file_contents.size(); i++){
                 m_automaton.readNewLine(m_file_contents.get(i));
             }
         } catch (Exception e){
-            System.err.println("File not in the write format.");
+            throw new Exception("File not in the right format");
         }
     }
 
@@ -69,11 +69,19 @@ public class AutomatonParser {
      */
     public static void main(String[] args){
         AutomatonParser parser = new AutomatonParser("src/adventure1.aut");
-        parser.parse();
+        try{
+            parser.parse();
+        } catch(Exception e){
+            System.err.println("File not in the right format");
+        }
         Automaton result = parser.automaton();
 
-        AutomatonParser parser2 = new AutomatonParser("src/adventure1.aut");
-        parser2.parse();
+        AutomatonParser parser2 = new AutomatonParser("src/adventure2.aut");
+        try {
+            parser2.parse();
+        } catch (Exception e){
+            System.err.println("File not in the right format");
+        }
         Automaton result2 = parser2.automaton();
 
         result.intersection(result2);

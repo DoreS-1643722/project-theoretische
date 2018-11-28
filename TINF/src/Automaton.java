@@ -1,6 +1,4 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Automaton {
     /**
@@ -23,8 +21,8 @@ public class Automaton {
      * Getter for the accept state of the automaton
      * @return the accept state
      */
-    public String getAccept_state() {
-        return accept_state;
+    public String getAccept_states(int i) {
+        return accept_states.get(i);
     }
 
     private ArrayList<String> m_states;
@@ -36,7 +34,7 @@ public class Automaton {
 
     private ArrayList<ArrayList<String>> m_relations;
     private String start_state;
-    private String accept_state;
+    private ArrayList<String> accept_states;
     private Boolean check;
 
     /**
@@ -47,6 +45,7 @@ public class Automaton {
         m_relations = new ArrayList<ArrayList<String>>();
         m_state_already_used = new ArrayList<Boolean>();
         check = false;
+        accept_states = new ArrayList<String>();
     }
 
     /**
@@ -60,7 +59,7 @@ public class Automaton {
                      String start_state, String accept_state){
         m_states = states;
         this.start_state = start_state;
-        this.accept_state = accept_state;
+        this.accept_states = accept_state;
         m_relations = relations;
 
         m_state_already_used = new ArrayList<Boolean>();
@@ -88,9 +87,11 @@ public class Automaton {
      */
     private String getShortestExampleHulp(String current_state, String previous_state){
         String temp_shortest_str = "";
-        if(current_state.equals(accept_state)){
-            check = true;
-            return temp_shortest_str;
+        for(int i = 0; i < accept_states.size(); i++){
+            if(current_state.equals(accept_states.get(i))){
+                check = true;
+                return temp_shortest_str;
+            }
         }
         for(int i = 0; i < m_relations.size(); i++){
             if(m_relations.get(i).get(0).equals(current_state)){
@@ -164,7 +165,7 @@ public class Automaton {
         ArrayList<String> new_states = cartesianProductStates(aut);
         ArrayList<ArrayList<String>> new_relations = productRelations(aut);
         String new_start_state = this.start_state + "-" + aut.getStart_state();
-        String new_accept_state = this.accept_state + "-" + aut.getAccept_state();
+        String new_accept_state = this.accept_states + "-" + aut.getAccept_states();
 
         return new Automaton(new_states, new_relations, new_start_state, new_accept_state);
     }
@@ -183,7 +184,7 @@ public class Automaton {
             int i = findIndexNextWhitespace(new_line);
             String new_state = new_line.substring(0, i);
             if(new_line.length() >= 11 && new_line.substring(i, i + 11).equals(" -| (FINAL)")){
-                accept_state = new_state;
+                accept_states.add(new_state);
                 addNewState(new_state);
             }
             else{
