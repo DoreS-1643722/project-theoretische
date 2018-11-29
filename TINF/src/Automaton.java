@@ -199,10 +199,19 @@ public class Automaton {
 
         for (ArrayList<String> relation1: this.m_relations) {
             for (ArrayList<String> relation2: aut.getM_relations()) {
-                if(relation1.get(1).equals(relation2.get(1))){
+                if(relation1.get(1).equals(relation2.get(1))
+                        || relation1.get(1).equals("$") || relation2.get(1).equals("$")) {
                     ArrayList<String> temp_list = new ArrayList<String>();
                     temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
-                    temp_list.add(relation1.get(1));
+                    if(relation1.get(1).equals("$")){
+                        temp_list.add(relation2.get(1));
+                    }
+                    else if(relation2.get(1).equals("$")){
+                        temp_list.add(relation1.get(1));
+                    }
+                    else{
+                        temp_list.add(relation1.get(1));
+                    }
                     temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
 
                     product.add(temp_list);
