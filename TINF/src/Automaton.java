@@ -81,7 +81,7 @@ public class Automaton {
     public String getShortestExample(Boolean accept){
         String shortest_string = "";
         shortest_string = getShortestExampleHulp(start_state, null, accept);
-        if(shortest_string == "" && !(m_passed_an_accept_state)){
+        if(shortest_string.equals("") && !(m_passed_an_accept_state)){
             shortest_string = null;
         }
         return shortest_string;
@@ -139,7 +139,9 @@ public class Automaton {
                         temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state, accept);
                     }
                     if(check == false){
-                        temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length() - 1);
+                        if(!(temp_shortest_str.equals(""))){
+                            temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length() - 1);
+                        }
                     }
                     else{
                         if(last_str.equals("")){
@@ -204,10 +206,10 @@ public class Automaton {
                     ArrayList<String> temp_list = new ArrayList<String>();
                     temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
                     if(relation1.get(1).equals("$")){
-                        temp_list.add(relation2.get(1));
+                        temp_list.add(relation1.get(1));
                     }
                     else if(relation2.get(1).equals("$")){
-                        temp_list.add(relation1.get(1));
+                        temp_list.add(relation2.get(1));
                     }
                     else{
                         temp_list.add(relation1.get(1));
