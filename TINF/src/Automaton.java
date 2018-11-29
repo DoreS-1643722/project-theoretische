@@ -88,6 +88,21 @@ public class Automaton {
     }
 
     /**
+     * Checks if the parameter current_state is not an accept state
+     * @param current_state the state the getShortestExample function is currently in
+     * @return Boolean check
+     */
+    private Boolean checkIfNotAnAcceptState(String current_state){
+        Boolean check = true;
+        for(int i = 0; i < accept_states.size(); i++){
+            if(accept_states.get(i).equals(current_state)){
+                check = false;
+            }
+        }
+        return check;
+    }
+
+    /**
      * Helpfunction for getShortestExample recursively generates the shortest
      * string accepted by the automaton.
      * @param current_state the state the automaton current is running over.
@@ -102,7 +117,7 @@ public class Automaton {
                 m_passed_an_accept_state = true;
                 return temp_shortest_str;
             }
-            else if(accept == false && current_state.equals(accept_states.get(i))){
+            else if(accept == false && checkIfNotAnAcceptState(current_state)){
                 check = true;
                 m_passed_an_accept_state = true;
                 return temp_shortest_str;
@@ -114,13 +129,21 @@ public class Automaton {
                 String last_str = temp_shortest_str;
                 if(m_state_already_used.get(m_states.indexOf(new_state)) == false) {
                     m_state_already_used.set(m_states.indexOf(current_state), true);
-                    temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state, accept);
+                    if(m_relations.get(i).get(1).equals("$")){
+                        temp_shortest_str += "" + getShortestExampleHulp(new_state, current_state, accept);
+                    }
+                    else{
+                        temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state, accept);
+                    }
                     if(check == false){
                         temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length() - 1);
                     }
                     else{
                         if(last_str.equals("")){
                             last_str = temp_shortest_str;
+                            if(!(temp_shortest_str.equals(""))){
+                                temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length()-1);
+                            }
                         }
                         else if (!(last_str.equals("")) && last_str.length() < temp_shortest_str.length()) {
                             temp_shortest_str = last_str;
