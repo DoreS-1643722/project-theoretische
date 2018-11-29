@@ -1,4 +1,8 @@
 public class Level2 {
+    /**
+     * Intersects the constraint automatons
+     * @return actualResult, the intersected constraint automaton
+     */
     public Automaton makeCohan(){
         AutomatonParser treasureparser = new AutomatonParser("src/twoTreasuresWithArches.aut");
         AutomatonParser keyparser = new AutomatonParser("src/keyFinder.aut");
@@ -22,6 +26,10 @@ public class Level2 {
         return actualResult;
     }
 
+    /**
+     * main function
+     * @param args
+     */
     public static void main(String[] args){
         try{
             AutomatonParser parse1 = new AutomatonParser("src/adventure.aut");

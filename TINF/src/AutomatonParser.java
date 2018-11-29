@@ -61,34 +61,4 @@ public class AutomatonParser {
     public Automaton automaton(){
         return m_automaton;
     }
-
-    /**
-     * Main function
-     * @param args arguments that can be given through the command line
-     *             not needed in this project
-     */
-    /*public static void main(String[] args){
-        AutomatonParser parser = new AutomatonParser("src/adventure1.aut");
-        try{
-            parser.parse();
-        } catch(Exception e){
-            System.err.println("File not in the right format");
-        }
-        Automaton result = parser.automaton();
-
-        AutomatonParser parser2 = new AutomatonParser("src/adventure2.aut");
-        try {
-            parser2.parse();
-        } catch (Exception e){
-            System.err.println("File not in the right format");
-        }
-        Automaton result2 = parser2.automaton();
-
-        Automaton intersect_automaton = result.intersection(result2);
-
-
-        System.out.println(result.getShortestExample(true));
-
-        System.out.println(intersect_automaton.getShortestExample(true));
-    }*/
 }

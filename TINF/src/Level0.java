@@ -1,4 +1,8 @@
 public class Level0 {
+    /**
+     * main function
+     * @param args
+     */
     public static void main(String[] args){
         AutomatonParser automaton_parser = new AutomatonParser("src/adventure.aut");
         try{

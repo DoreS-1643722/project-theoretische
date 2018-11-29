@@ -1,4 +1,8 @@
 public class Level1 {
+    /**
+     * Intersects all the 3 given constraints
+     * @return actualResult, the intersected constraint automaton
+     */
     public Automaton makeRincewind(){
         AutomatonParser treasureparser = new AutomatonParser("src/twoTreasures.aut");
         AutomatonParser keyparser = new AutomatonParser("src/keyFinder.aut");
@@ -22,6 +26,10 @@ public class Level1 {
         return actualResult;
     }
 
+    /**
+     * main function
+     * @param args
+     */
     public static void main(String[] args){
         try{
             AutomatonParser parse1 = new AutomatonParser("src/adventure.aut");
