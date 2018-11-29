@@ -84,9 +84,11 @@ public class AutomatonParser {
         }
         Automaton result2 = parser2.automaton();
 
-        result.intersection(result2);
+        Automaton intersect_automaton = result.intersection(result2);
 
 
         System.out.println(result.getShortestExample(true));
+
+        System.out.println(intersect_automaton.getShortestExample(true));
     }
 }

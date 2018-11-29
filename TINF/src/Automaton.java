@@ -36,6 +36,7 @@ public class Automaton {
     private String start_state;
     private ArrayList<String> accept_states;
     private Boolean check;
+    private Boolean m_passed_an_accept_state;
 
     /**
      * Constructor
@@ -45,6 +46,7 @@ public class Automaton {
         m_relations = new ArrayList<ArrayList<String>>();
         m_state_already_used = new ArrayList<Boolean>();
         check = false;
+        m_passed_an_accept_state = false;
         accept_states = new ArrayList<String>();
     }
 
@@ -63,7 +65,11 @@ public class Automaton {
         m_relations = relations;
 
         m_state_already_used = new ArrayList<Boolean>();
+        for(int i = 0; i < states.size(); i++){
+            m_state_already_used.add(false);
+        }
         check = false;
+        m_passed_an_accept_state = false;
     }
 
     /**
@@ -74,8 +80,26 @@ public class Automaton {
      */
     public String getShortestExample(Boolean accept){
         String shortest_string = "";
-        shortest_string = getShortestExampleHulp(start_state, null);
+        shortest_string = getShortestExampleHulp(start_state, null, accept);
+        if(shortest_string == "" && !(m_passed_an_accept_state)){
+            shortest_string = null;
+        }
         return shortest_string;
+    }
+
+    /**
+     * Checks if the parameter current_state is not an accept state
+     * @param current_state the state the getShortestExample function is currently in
+     * @return Boolean check
+     */
+    private Boolean checkIfNotAnAcceptState(String current_state){
+        Boolean check = true;
+        for(int i = 0; i < accept_states.size(); i++){
+            if(accept_states.get(i).equals(current_state)){
+                check = false;
+            }
+        }
+        return check;
     }
 
     /**
@@ -85,11 +109,17 @@ public class Automaton {
      * @param previous_state the state the automaton was in in the previous iteration.
      * @return the current found string
      */
-    private String getShortestExampleHulp(String current_state, String previous_state){
+    private String getShortestExampleHulp(String current_state, String previous_state, Boolean accept){
         String temp_shortest_str = "";
         for(int i = 0; i < accept_states.size(); i++){
-            if(current_state.equals(accept_states.get(i))){
+            if(accept == true && current_state.equals(accept_states.get(i))){
                 check = true;
+                m_passed_an_accept_state = true;
+                return temp_shortest_str;
+            }
+            else if(accept == false && checkIfNotAnAcceptState(current_state)){
+                check = true;
+                m_passed_an_accept_state = true;
                 return temp_shortest_str;
             }
         }
@@ -99,7 +129,12 @@ public class Automaton {
                 String last_str = temp_shortest_str;
                 if(m_state_already_used.get(m_states.indexOf(new_state)) == false) {
                     m_state_already_used.set(m_states.indexOf(current_state), true);
-                    temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state);
+                    if(m_relations.get(i).get(1).equals("$")){
+                        temp_shortest_str += "" + getShortestExampleHulp(new_state, current_state, accept);
+                    }
+                    else{
+                        temp_shortest_str += m_relations.get(i).get(1) + getShortestExampleHulp(new_state, current_state, accept);
+                    }
                     if(check == false){
                         temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length() - 1);
                     }
@@ -161,12 +196,21 @@ public class Automaton {
 
         for (ArrayList<String> relation1: this.m_relations) {
             for (ArrayList<String> relation2: aut.getM_relations()) {
+<<<<<<< HEAD
                 ArrayList<String> temp_list = new ArrayList<String>();
                 temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
                 temp_list.add(relation1.get(1) + relation2.get(1));
                 temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
+=======
+                if(relation1.get(1).equals(relation2.get(1))){
+                    ArrayList<String> temp_list = new ArrayList<String>();
+                    temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
+                    temp_list.add(relation1.get(1));
+                    temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
+>>>>>>> 17700740f4f9e492cefa7d128df6d4f49fe72adf
 
-                product.add(temp_list);
+                    product.add(temp_list);
+                }
             }
         }
 
