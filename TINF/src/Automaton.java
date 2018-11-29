@@ -141,9 +141,6 @@ public class Automaton {
                     else{
                         if(last_str.equals("")){
                             last_str = temp_shortest_str;
-                            if(!(temp_shortest_str.equals(""))){
-                                temp_shortest_str = temp_shortest_str.substring(0, temp_shortest_str.length()-1);
-                            }
                         }
                         else if (!(last_str.equals("")) && last_str.length() < temp_shortest_str.length()) {
                             temp_shortest_str = last_str;

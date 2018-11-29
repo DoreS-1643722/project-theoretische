@@ -68,7 +68,7 @@ public class AutomatonParser {
      *             not needed in this project
      */
     public static void main(String[] args){
-        AutomatonParser parser = new AutomatonParser("src/adventure4.aut");
+        AutomatonParser parser = new AutomatonParser("src/adventure1.aut");
         try{
             parser.parse();
         } catch(Exception e){
