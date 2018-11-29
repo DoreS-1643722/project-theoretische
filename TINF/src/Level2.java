@@ -1,5 +1,5 @@
 public class Level2 {
-    public Automaton makeRincewind(){
+    public Automaton makeCohan(){
         AutomatonParser treasureparser = new AutomatonParser("src/twoTreasuresWithArches.aut");
         AutomatonParser keyparser = new AutomatonParser("src/keyFinder.aut");
         AutomatonParser burningManparser = new AutomatonParser("src/burningMan.aut");
@@ -29,7 +29,7 @@ public class Level2 {
 
             parse1.parse();
             Automaton aut1 = parse1.automaton();
-            Automaton aut2 = level_constraints.makeRincewind();
+            Automaton aut2 = level_constraints.makeCohan();
             Automaton result = aut1.intersection(aut2);
 
             System.out.println(result.getShortestExample(true));
