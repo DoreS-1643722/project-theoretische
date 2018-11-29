@@ -163,7 +163,7 @@ public class Automaton {
             for (ArrayList<String> relation2: aut.getM_relations()) {
                 ArrayList<String> temp_list = new ArrayList<String>();
                 temp_list.add(relation1.get(0) + "-" +  relation2.get(0));
-                temp_list.add(relation1.get(1) + "-" +  relation2.get(1));
+                temp_list.add(relation1.get(1) + relation2.get(1));
                 temp_list.add(relation1.get(2) + "-" +  relation2.get(2));
 
                 product.add(temp_list);
