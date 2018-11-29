@@ -93,13 +93,13 @@ public class Automaton {
      * @return Boolean check
      */
     private Boolean checkIfNotAnAcceptState(String current_state){
-        Boolean check = true;
+        Boolean temp_check = true;
         for(int i = 0; i < accept_states.size(); i++){
             if(accept_states.get(i).equals(current_state)){
-                check = false;
+                temp_check = false;
             }
         }
-        return check;
+        return temp_check;
     }
 
     /**
@@ -130,6 +130,9 @@ public class Automaton {
                 if(m_state_already_used.get(m_states.indexOf(new_state)) == false) {
                     m_state_already_used.set(m_states.indexOf(current_state), true);
                     if(m_relations.get(i).get(1).equals("$")){
+                        if(current_state.equals(start_state)){
+                            temp_shortest_str = "";
+                        }
                         temp_shortest_str += "" + getShortestExampleHulp(new_state, current_state, accept);
                     }
                     else{

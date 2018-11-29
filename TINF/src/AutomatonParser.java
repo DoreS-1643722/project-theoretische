@@ -67,7 +67,7 @@ public class AutomatonParser {
      * @param args arguments that can be given through the command line
      *             not needed in this project
      */
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         AutomatonParser parser = new AutomatonParser("src/adventure1.aut");
         try{
             parser.parse();
@@ -90,5 +90,5 @@ public class AutomatonParser {
         System.out.println(result.getShortestExample(true));
 
         System.out.println(intersect_automaton.getShortestExample(true));
-    }
+    }*/
 }
